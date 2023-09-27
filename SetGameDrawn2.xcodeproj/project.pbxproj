@@ -13,6 +13,11 @@
 		842E86012AB37F6900877466 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 842E85FF2AB37F6900877466 /* Main.storyboard */; };
 		842E86032AB37F6B00877466 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 842E86022AB37F6B00877466 /* Assets.xcassets */; };
 		842E86062AB37F6B00877466 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 842E86042AB37F6B00877466 /* LaunchScreen.storyboard */; };
+		84C9DC0B2ABCA46C0017230D /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C9DC0A2ABCA46C0017230D /* Grid.swift */; };
+		84F53D672AB395F000A8410A /* SetCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F53D662AB395F000A8410A /* SetCard.swift */; };
+		84F53D692AB399C200A8410A /* SetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F53D682AB399C200A8410A /* SetGame.swift */; };
+		84F53D6D2AB39E5200A8410A /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F53D6C2AB39E5200A8410A /* CardView.swift */; };
+		84F53D6F2AB4A30200A8410A /* SubclassedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F53D6E2AB4A30200A8410A /* SubclassedCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +29,11 @@
 		842E86022AB37F6B00877466 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		842E86052AB37F6B00877466 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		842E86072AB37F6B00877466 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		84C9DC0A2ABCA46C0017230D /* Grid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
+		84F53D662AB395F000A8410A /* SetCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCard.swift; sourceTree = "<group>"; };
+		84F53D682AB399C200A8410A /* SetGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGame.swift; sourceTree = "<group>"; };
+		84F53D6C2AB39E5200A8410A /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		84F53D6E2AB4A30200A8410A /* SubclassedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubclassedCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,13 +68,50 @@
 			children = (
 				842E85F92AB37F6900877466 /* AppDelegate.swift */,
 				842E85FB2AB37F6900877466 /* SceneDelegate.swift */,
-				842E85FD2AB37F6900877466 /* ViewController.swift */,
+				84C9DC092ABCA4590017230D /* Utilities */,
+				84F53D652AB395CF00A8410A /* Controllers */,
+				84F53D632AB395B300A8410A /* Models */,
+				84F53D642AB395BB00A8410A /* Views */,
 				842E85FF2AB37F6900877466 /* Main.storyboard */,
 				842E86022AB37F6B00877466 /* Assets.xcassets */,
 				842E86042AB37F6B00877466 /* LaunchScreen.storyboard */,
 				842E86072AB37F6B00877466 /* Info.plist */,
 			);
 			path = Set;
+			sourceTree = "<group>";
+		};
+		84C9DC092ABCA4590017230D /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				84C9DC0A2ABCA46C0017230D /* Grid.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		84F53D632AB395B300A8410A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				84F53D662AB395F000A8410A /* SetCard.swift */,
+				84F53D682AB399C200A8410A /* SetGame.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		84F53D642AB395BB00A8410A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				84F53D6C2AB39E5200A8410A /* CardView.swift */,
+				84F53D6E2AB4A30200A8410A /* SubclassedCollectionViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		84F53D652AB395CF00A8410A /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				842E85FD2AB37F6900877466 /* ViewController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -95,14 +142,14 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					842E85F52AB37F6900877466 = {
 						CreatedOnToolsVersion = 14.2;
 					};
 				};
 			};
-			buildConfigurationList = 842E85F12AB37F6900877466 /* Build configuration list for PBXProject "Set" */;
+			buildConfigurationList = 842E85F12AB37F6900877466 /* Build configuration list for PBXProject "SetGameDrawn2" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -138,9 +185,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84F53D6F2AB4A30200A8410A /* SubclassedCollectionViewCell.swift in Sources */,
+				84F53D692AB399C200A8410A /* SetGame.swift in Sources */,
 				842E85FE2AB37F6900877466 /* ViewController.swift in Sources */,
+				84C9DC0B2ABCA46C0017230D /* Grid.swift in Sources */,
 				842E85FA2AB37F6900877466 /* AppDelegate.swift in Sources */,
 				842E85FC2AB37F6900877466 /* SceneDelegate.swift in Sources */,
+				84F53D6D2AB39E5200A8410A /* CardView.swift in Sources */,
+				84F53D672AB395F000A8410A /* SetCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +254,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -262,6 +315,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -339,7 +393,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		842E85F12AB37F6900877466 /* Build configuration list for PBXProject "Set" */ = {
+		842E85F12AB37F6900877466 /* Build configuration list for PBXProject "SetGameDrawn2" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				842E86082AB37F6B00877466 /* Debug */,
