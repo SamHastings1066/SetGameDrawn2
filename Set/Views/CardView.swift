@@ -8,42 +8,128 @@
 import UIKit
 
 class CardView: UIView {
-    var shapeColor = UIColor.green
+    
+    /// The SetCard that this instance of CardView represents
     var card: SetCard!
+    
+    /// The color of the symbols in this CardView instance.
+    private var shapeColor = UIColor.green
+    
+    /// Grid for laying out the position of symbols within a CardView
     private var grid: Grid!
     
-    override func draw(_ rect: CGRect) {
-        
-        grid = Grid(layout: .dimensions(rowCount: card.number.rawValue, columnCount: 1), frame: CGRect(origin: self.bounds.origin, size: self.bounds.size)) // grid used inside a card to layout symbols
-        let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius)
-        // Make the roundedRect the current clipping path i.e. everything is draw within it's frame
-        roundedRect.addClip()
-        //set background to white if it's not explicity set externally
-        (self.backgroundColor ?? UIColor.white).setFill()
-        roundedRect.fill()
-        
-        switch card.color {
-        case .color1:
-            shapeColor = UIColor.green
-        case .color2:
-            shapeColor = UIColor.purple
-        case .color3:
-            shapeColor = UIColor.orange
-        }
-        
-        for gridIndex in 0..<card.number.rawValue {
-            switch card.shape {
-            case .shape1:
-                drawDiamond(in: grid[gridIndex]!, color: shapeColor)
-            case .shape2:
-                drawOval(in: grid[gridIndex]!, color: shapeColor)
-            case .shape3:
-                drawSquiggle(in: grid[gridIndex]!, color: shapeColor)
+    /// Whether the CardView is visible or not
+    var isVisible: Bool = false {
+    // set the CardView's alpha to 1.0 if it is in play, else 0.0
+        // e.g. when I cardview has been created, but not the dealing animation has not placed it on the cardsInPlay view, then the card is not visible unitl it is animated to the view.
+        didSet {
+            //setNeedsDisplay()
+            //setNeedsLayout()
+            if isVisible {
+                alpha = 1.0
+            } else {
+                alpha = 0.0
             }
         }
+    }
+    
+    /// Selection state of CardView
+    var state: SelectedState = .unselected {
+        didSet {
+            switch state {
+            case .unselected:
+                cardBackgroundColour = UIColor.white
+            case .selected:
+                cardBackgroundColour = UIColor.blue.withAlphaComponent(0.2)
+            case .matched:
+                cardBackgroundColour = UIColor(red: 0, green: 0.5, blue: 0, alpha: 1.0)
+            case .mismatched:
+                cardBackgroundColour = UIColor.red.withAlphaComponent(0.2)
+            }
+        }
+    }
+    
+
+    
+    /// Whether the CardView is face up or not
+    var isFaceUp = false {
+        didSet {
+            setNeedsDisplay()
+            //setNeedsLayout()
+        }
+    }
+    
+    /// The CardView's background colour
+    var cardBackgroundColour = UIColor.white {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
+    /// initialiser for programmaticlly created instance of this class
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        // Ensure corners are not black
+        self.isOpaque = false
+        // Ensures cards start out invisible before they are dealt.
+        self.alpha = 0
+    }
+    
+    /// Initiliaiser used for instances created from storyboard. IT IS NOT BEING USED!
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    /// Draws the CardView within 'rect'
+    override func draw(_ rect: CGRect) {
+        
+        
+        grid = Grid(layout: .dimensions(rowCount: card.number.rawValue, columnCount: 1), frame: CGRect(origin: self.bounds.origin, size: self.bounds.size))
+        let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius)
+        // Make the roundedRect the current clipping path i.e. everything is draw within its frame
+        roundedRect.addClip()
+        if isFaceUp {
+            cardBackgroundColour.setFill()
+            roundedRect.fill()
+            
+            switch card.color {
+            case .color1:
+                shapeColor = UIColor.green
+            case .color2:
+                shapeColor = UIColor.purple
+            case .color3:
+                shapeColor = UIColor.orange
+            }
+            
+            for gridIndex in 0..<card.number.rawValue {
+                switch card.shape {
+                case .shape1:
+                    drawDiamond(in: grid[gridIndex]!, color: shapeColor)
+                case .shape2:
+                    drawOval(in: grid[gridIndex]!, color: shapeColor)
+                case .shape3:
+                    drawSquiggle(in: grid[gridIndex]!, color: shapeColor)
+                }
+            }
+        } else {
+            UIColor.lightGray.setFill()
+            roundedRect.fill()
+        }
+        
 
     }
     
+    /// Draws shading cooresponding to the SetCard's shading property.
+    func drawShading(in rect: CGRect, withShape shape: UIBezierPath, color: UIColor) {
+        if card.shading == .solid {
+            color.setFill()
+            shape.fill()
+        } else if card.shading == .striped {
+            drawStripes(in: rect, path: shape)
+        }
+    }
+    
+    /// Draws a diamond shape
     func drawDiamond(in rect: CGRect, color: UIColor) {
         let diamondHeight = rect.width * 0.32
         let diamondWidth = rect.width * 0.7
@@ -62,16 +148,11 @@ class CardView: UIView {
         diamond.lineWidth = rect.size.width / 90
         color.setStroke()
         diamond.stroke()
-        if card.shading == .solid {
-            color.setFill()
-            diamond.fill()
-        } else if card.shading == .striped {
-            drawStripes(in: rect, path: diamond)
-        }
+        drawShading(in: rect, withShape: diamond, color: color)
         
     }
     
-    
+    /// Draws an oval shape
     func drawOval(in rect: CGRect, color: UIColor) {
         let ovalHeight = rect.width * 0.32
         let ovalWidth = rect.width * 0.7
@@ -89,14 +170,10 @@ class CardView: UIView {
         color.setStroke()
         oval.stroke()
         
-        if card.shading == .solid {
-            color.setFill()
-            oval.fill()
-        } else if card.shading == .striped {
-            drawStripes(in: rect, path: oval)
-        }
+        drawShading(in: rect, withShape: oval, color: color)
     }
     
+    /// Draws a squiggle shape
     func drawSquiggle(in rect: CGRect, color: UIColor) {
         let startPoint = CGPoint(x: 76.5, y: 403.5)
         let curves = [ // to, cp1, cp2
@@ -129,7 +206,7 @@ class CardView: UIView {
             squiggle.addCurve(to: to, controlPoint1: cp1, controlPoint2: cp2)
         }
         squiggle.close()
-        // Your code to scale, rotate and translate the squiggle
+        // Code to scale, rotate and translate the squiggle
         let squiggleCenterX = squiggle.bounds.midX
         let squiggleCenterY = squiggle.bounds.midY
         let scaleFactor = 0.7 * (rect.width / squiggle.bounds.width)
@@ -144,17 +221,12 @@ class CardView: UIView {
         squiggle.lineWidth = rect.size.width / 90
         color.setStroke()
         squiggle.stroke()
-        if card.shading == .solid {
-            color.setFill()
-            squiggle.fill()
-        } else if card.shading == .striped {
-            drawStripes(in: rect, path: squiggle)
-        }
+        drawShading(in: rect, withShape: squiggle, color: color)
         
     }
     
 
-    
+    /// Draws stripes for SetCards whose shading property is set to case .striped.
     func drawStripes(in rect: CGRect, path: UIBezierPath) {
         if let context = UIGraphicsGetCurrentContext() {
             context.saveGState()
@@ -174,13 +246,17 @@ class CardView: UIView {
 }
 
 extension CardView {
+    
     private struct SizeRatio {
+        /// Ratio of a CardView's cornder radius to its bounds height
         static let cornerRadiusToBoundsHeight: CGFloat = 0.06
     }
     private var cornerRadius: CGFloat {
+        /// CardView's cornder radius
         return bounds.size.height * SizeRatio.cornerRadiusToBoundsHeight
     }
 }
 
-
-
+enum SelectedState {
+    case unselected, selected, matched, mismatched
+}

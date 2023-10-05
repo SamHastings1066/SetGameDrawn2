@@ -32,7 +32,6 @@ struct SetCard: CustomStringConvertible {
 
 extension SetCard: Hashable {
     static func ==(lhs: SetCard, rhs:SetCard) -> Bool {
-        print("test")
         return lhs.shading == rhs.shading && lhs.color == rhs.color && lhs.number == rhs.number && lhs.shape == rhs.shape
     }
 }
