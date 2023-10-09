@@ -15,6 +15,11 @@ class CardView: UIView {
     /// The color of the symbols in this CardView instance.
     private var shapeColor = UIColor.green
     
+    var color: UIColor = .green
+    var number: Number = .one
+    var shading: Shading = .solid
+    var shapeType: Shape = .shape1
+    
     /// Grid for laying out the position of symbols within a CardView
     private var grid: Grid!
     

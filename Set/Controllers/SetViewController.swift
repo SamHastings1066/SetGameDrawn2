@@ -68,7 +68,7 @@ class SetViewController: UIViewController {
         view.addSubview(scoreLabel)
         setConstraints()
         applyInitialLayoutConstraints()
-        //addGestureRecognizers()
+        addGestureRecognizers()
         setGame.dealCards(numCards: 12)
         scoreLabel.text = "Score: \(setGame.score)"
         
@@ -77,7 +77,6 @@ class SetViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        // below, the call to dealMoreCardsButton.convert(_:to:)
         
         view.layoutIfNeeded()
         // Convert dealMoreCardsButton.frame.origin from view's coordinates to the cardsInPlayView's coordinates
@@ -99,13 +98,13 @@ class SetViewController: UIViewController {
     }
     
     
-//    func addGestureRecognizers() {
-//        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(dealMoreCardsOnSwipe))
-//        swipeDown.direction = .down
-//        view.addGestureRecognizer(swipeDown)
-//        let rotation = UIRotationGestureRecognizer(target: self, action: #selector(reshuffleCardsInPlay))
-//        view.addGestureRecognizer(rotation)
-//    }
+    func addGestureRecognizers() {
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(dealMoreCardsOnSwipe))
+        swipeDown.direction = .down
+        view.addGestureRecognizer(swipeDown)
+        let rotation = UIRotationGestureRecognizer(target: self, action: #selector(reshuffleCardsInPlay))
+        view.addGestureRecognizer(rotation)
+    }
     
     func setConstraints() {
         let safeArea = view.safeAreaLayoutGuide
@@ -321,28 +320,28 @@ class SetViewController: UIViewController {
         scoreLabel.text = "Score: \(setGame.score)"
     }
     
-//    @objc func reshuffleCardsInPlay(recognizer: UIRotationGestureRecognizer) {
-//        switch recognizer.state {
-//        case .began:
-//            for view in cardsInPlayView.subviews {
-//                view.removeFromSuperview()
-//            }
-//            cardsInPlayView.setCardViews = [CardView]()
-//            setGame.reshuffle()
-//            drawCards()
-//        default:
-//            break
-//        }
-//    }
-//    
-//    @objc func dealMoreCardsOnSwipe(recognizer: UISwipeGestureRecognizer) {
-//        switch recognizer.direction {
-//        case .down:
-//            dealThreeMoreCards()
-//        default:
-//            break
-//        }
-//    }
+    @objc func reshuffleCardsInPlay(recognizer: UIRotationGestureRecognizer) {
+        switch recognizer.state {
+        case .began:
+            for view in cardsInPlayView.subviews {
+                view.removeFromSuperview()
+            }
+            cardsInPlayView.cardsInPlayCardViews = [CardView]()
+            setGame.reshuffle()
+            updateCardsInPlayViewFromModel()
+        default:
+            break
+        }
+    }
+    
+    @objc func dealMoreCardsOnSwipe(recognizer: UISwipeGestureRecognizer) {
+        switch recognizer.direction {
+        case .down:
+            dealThreeMoreCards()
+        default:
+            break
+        }
+    }
     
     
 }
