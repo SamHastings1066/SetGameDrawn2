@@ -10,12 +10,12 @@ import UIKit
 class CardView: UIView {
     
     /// The SetCard that this instance of CardView represents
-    var card: SetCard!
+    //var card: SetCard!
     
     /// The color of the symbols in this CardView instance.
     private var shapeColor = UIColor.green
     
-    var color: UIColor = .green
+    var color: Color = .color1
     var number: Number = .one
     var shading: Shading = .solid
     var shapeType: Shape = .shape1
@@ -28,8 +28,6 @@ class CardView: UIView {
     // set the CardView's alpha to 1.0 if it is in play, else 0.0
         // e.g. when I cardview has been created, but not the dealing animation has not placed it on the cardsInPlay view, then the card is not visible unitl it is animated to the view.
         didSet {
-            //setNeedsDisplay()
-            //setNeedsLayout()
             if isVisible {
                 alpha = 1.0
             } else {
@@ -60,7 +58,6 @@ class CardView: UIView {
     var isFaceUp = false {
         didSet {
             setNeedsDisplay()
-            //setNeedsLayout()
         }
     }
     
@@ -89,7 +86,7 @@ class CardView: UIView {
     override func draw(_ rect: CGRect) {
         
         
-        grid = Grid(layout: .dimensions(rowCount: card.number.rawValue, columnCount: 1), frame: CGRect(origin: self.bounds.origin, size: self.bounds.size))
+        grid = Grid(layout: .dimensions(rowCount: number.rawValue, columnCount: 1), frame: CGRect(origin: self.bounds.origin, size: self.bounds.size))
         let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius)
         // Make the roundedRect the current clipping path i.e. everything is draw within its frame
         roundedRect.addClip()
@@ -97,7 +94,7 @@ class CardView: UIView {
             cardBackgroundColour.setFill()
             roundedRect.fill()
             
-            switch card.color {
+            switch color {
             case .color1:
                 shapeColor = UIColor.green
             case .color2:
@@ -106,8 +103,8 @@ class CardView: UIView {
                 shapeColor = UIColor.orange
             }
             
-            for gridIndex in 0..<card.number.rawValue {
-                switch card.shape {
+            for gridIndex in 0..<number.rawValue {
+                switch shapeType {
                 case .shape1:
                     drawDiamond(in: grid[gridIndex]!, color: shapeColor)
                 case .shape2:
@@ -126,10 +123,10 @@ class CardView: UIView {
     
     /// Draws shading cooresponding to the SetCard's shading property.
     func drawShading(in rect: CGRect, withShape shape: UIBezierPath, color: UIColor) {
-        if card.shading == .solid {
+        if shading == .solid {
             color.setFill()
             shape.fill()
-        } else if card.shading == .striped {
+        } else if shading == .striped {
             drawStripes(in: rect, path: shape)
         }
     }

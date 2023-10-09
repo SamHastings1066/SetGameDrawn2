@@ -180,23 +180,31 @@ class SetViewController: UIViewController {
     // TODO: move to CardsInPlayView
     func insertCardViewIntoCardsInPlayCardViews(withCard card: SetCard, at index: Int) {
         let cardView = CardView()
-        cardView.card = card
+        cardView.color = card.color
+        cardView.number = card.number
+        cardView.shading = card.shading
+        cardView.shapeType = card.shape
         let tap = UITapGestureRecognizer(target: self, action: #selector(cardTapped(_:)))
         cardView.addGestureRecognizer(tap)
-        //cardsInPlayView.cardsInPlayCardViews.append(cardView)
         cardsInPlayView.cardsInPlayCardViews.insert(cardView, at: index)
         cardsInPlayView.addSubview(cardView)
+    }
+    
+    func getSetCard(from cardView: CardView) -> SetCard{
+        let setCard = SetCard(number: cardView.number, color: cardView.color, shading: cardView.shading, shape: cardView.shapeType)
+        return setCard
     }
     
     func updateCardsInPlayViewFromModel() {
         
         // Update the state of all cardviews in cardsInPlayView.cardsInPlayCardViews
         for cardView in cardsInPlayView.cardsInPlayCardViews {
-            if setGame.matchedCards.contains(cardView.card) {
+            let setCard = getSetCard(from: cardView)
+            if setGame.matchedCards.contains(setCard) {
                 cardView.state = .matched
-            } else if setGame.misMatchedCards.contains(cardView.card) {
+            } else if setGame.misMatchedCards.contains(setCard) {
                 cardView.state = .mismatched
-            } else if setGame.selectedCards.contains(cardView.card) {
+            } else if setGame.selectedCards.contains(setCard) {
                 cardView.state = .selected
             } else {
                 cardView.state = .unselected
@@ -205,8 +213,8 @@ class SetViewController: UIViewController {
         
         // TODO: change these into a function in cardsInPlayView that updates the cardView collections based on the cardview states.
         // Identify any matched cardViews and remove them from cardsInPlayCardViews
-        let matchedCardViews = cardsInPlayView.cardsInPlayCardViews.filter({ setGame.matchedCards.contains($0.card) })
-        cardsInPlayView.cardsInPlayCardViews.removeAll(where: {!setGame.cardsInPlay.contains($0.card)})
+        let matchedCardViews = cardsInPlayView.cardsInPlayCardViews.filter({ setGame.matchedCards.contains(getSetCard(from: $0)) })
+        cardsInPlayView.cardsInPlayCardViews.removeAll(where: {!setGame.cardsInPlay.contains(getSetCard(from: $0))})
         cardsInPlayView.matchedCardViews += matchedCardViews
         
         UIViewPropertyAnimator.runningPropertyAnimator(
@@ -249,7 +257,7 @@ class SetViewController: UIViewController {
 
         // For any card in setGame.cardsInPlay that isn't already included in cardsInPlay.cardsInPlayCardViews, add a new CardView
         for (index, card) in setGame.cardsInPlay.enumerated() {
-            if cardsInPlayView.cardsInPlayCardViews.first(where: {$0.card == card}) == nil {
+            if cardsInPlayView.cardsInPlayCardViews.first(where: {getSetCard(from: $0) == card}) == nil {
                 insertCardViewIntoCardsInPlayCardViews(withCard: card, at: index)
             }
         }
@@ -275,9 +283,9 @@ class SetViewController: UIViewController {
     
     // This function should update the setGame and then call updateViewFromModel
     @objc func cardTapped(_ sender: UITapGestureRecognizer? = nil) {
-        if let tappedCard = (sender?.view as? CardView)?.card {
+        let tappedCard = getSetCard(from: ((sender?.view as? CardView)!))
             setGame.handleTap(on: tappedCard)
-        }
+        //}
 
         updateCardsInPlayViewFromModel()
         
@@ -301,16 +309,6 @@ class SetViewController: UIViewController {
     @objc func newGame() {
         setGame.resetGame()
         enableDealCardsButton()
-        // TODO: delete comments below
-//        // this line should be removed and placed in updateViewFromModel function
-//        for view in cardsInPlayView.subviews {
-//            view.removeFromSuperview()
-//        }
-//        // this line should be removed and placed in updateViewFromModel function
-//        cardsInPlayView.setCardViews = [CardView]()
-        //loadCardsInPlayViewFromModel()
-        // Empty all CardViews collections
-        //        cardsInPlayView.deckCardViews = [CardView]()
         for view in cardsInPlayView.subviews {
             view.removeFromSuperview()
         }
